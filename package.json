@@ -1,0 +1,24 @@
+{
+  "name": "perguntasrespostas",
+  "version": "1.0.0",
+  "description": "\u001b[A\u001b[B\u001b[B\u001b[BUma plataforma de perguntas e respostas",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caiohscruz/Perguntas-e-Respostas.git"
+  },
+  "author": "caiohscruz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caiohscruz/Perguntas-e-Respostas/issues"
+  },
+  "homepage": "https://github.com/caiohscruz/Perguntas-e-Respostas#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1"
+  }
+}
