@@ -15,6 +15,6 @@ const Question = connection.define("Questions",{
 })
 /* Trecho para sincronizar a tabela, criando-a caso não exista
     force "false" para não criar uma tabela caso já exista - CREATE*/
-Question.sync({force: false}).then(()=>{}) 
+Question.sync({force: false})
 
 module.exports = Question

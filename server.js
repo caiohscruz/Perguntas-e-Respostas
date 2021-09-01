@@ -8,8 +8,11 @@ const bodyParser = require("body-parser")
 // Setando conexão com o banco de dados
 const connection = require("./database/database")
 
-// Mapeando a tabela pergunta
+// Mapeando a tabela Questions
 const Question = require("./database/Question")
+
+// Mapeando a tabela Answers
+const Answer = require("./database/Answer")
 
 // Conectando
 connection
@@ -36,10 +39,10 @@ app.use(bodyParser.urlencoded({
 // Rotas
 
 // Rota para a home
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
     // SELECT - raw true para não trazer elementos desnecessarios do bd
     // ASC/DESC - crescente ou decrescente
-    Question.findAll({
+    await Question.findAll({
         raw: true, 
         order:[
             ['id', 'DESC']
@@ -52,40 +55,61 @@ app.get("/", (req, res) => {
     })
     
     // Rota para a página de fazer pergunta
-    app.get("/question/:id", (req, res) => {
+    app.get("/question/:id", async (req, res) => {
         var id =  req.params.id
-        Question.findOne({
+        await Question.findOne({
             where:{id: id}
-        }).then(question => {
+        }).then(async question => {
             if (question != undefined){
                 // Pergunta encontrada
-                res.render("question", { 
-                    question : question,
-                    page : "question"
-                })
-            }else{
-                // Pergunta não encontrada
+                await Answer.findAll({
+                    where: {questionId: id},
+                    raw: true, 
+                    order:[
+                        ['id', 'DESC']
+                    ]}).then(answers => {
+                        res.render("question", { 
+                            question : question,
+                            answers: answers,
+                            page : "question"
+                        })
+                    })
+                }else{
+                    // Pergunta não encontrada
+                    res.redirect("/")
+                }
+            })
+        })
+        
+        // Rota para a página de fazer pergunta
+        app.get("/newquestion", (req, res) => {
+            res.render("newquestion", { page : "newquestion"})
+        })
+        
+        // Rota para a página de pergunta salva
+        app.post("/save-question", async (req, res) => {
+            var title = req.body.titulo
+            var description = req.body.descricao
+            // INSERT
+            await Question.create({
+                title: title,
+                description : description
+            }).then(()=> {
                 res.redirect("/")
-            }
+            })
         })
-    })
-
-    // Rota para a página de fazer pergunta
-    app.get("/newquestion", (req, res) => {
-        res.render("newquestion", { page : "newquestion"})
-    })
-    
-    // Rota para a página de pergunta salva
-    app.post("/save-question", (req, res) => {
-        var title = req.body.titulo
-        var description = req.body.descricao
-        // INSERT
-        Question.create({
-            title: title,
-            description : description
-        }).then(()=> {
-            res.redirect("/")
+        
+        // Rota para a página de pergunta salva
+        app.post("/save-answer", async (req, res) => {
+            var body = req.body.answerBody
+            var questionId = req.body.questionId
+            // INSERT
+            await Answer.create({
+                body: body,
+                questionId : questionId
+            }).then(()=> {
+                res.redirect("/question/"+questionId)
+            })
         })
-    })
-    
-    app.listen(8081, ()=>{console.log("Testing...")})
+        
+        app.listen(8081, ()=>{console.log("Testing...")})
