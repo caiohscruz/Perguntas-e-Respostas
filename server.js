@@ -37,24 +37,52 @@ app.use(bodyParser.urlencoded({
 
 // Rota para a home
 app.get("/", (req, res) => {
-    res.render("index", { page : "home"} )
-})
-
-// Rota para a página de perguntas
-app.get("/asking", (req, res) => {
-    res.render("asking", { page : "asking"})
-})
-
-// Rota para a página de pergunta salva
-app.post("/save-question", (req, res) => {
-    var title = req.body.titulo
-    var description = req.body.descricao
-    Question.create({
-        title: title,
-        description : description
-    }).then(()=> {
-        res.redirect("/")
+    // SELECT - raw true para não trazer elementos desnecessarios do bd
+    // ASC/DESC - crescente ou decrescente
+    Question.findAll({
+        raw: true, 
+        order:[
+            ['id', 'DESC']
+        ]}).then(questions => {
+            res.render("index", {
+                questions : questions,
+                page : "home"
+            })
+        })
     })
-})
+    
+    // Rota para a página de fazer pergunta
+    app.get("/question/:id", (req, res) => {
+        var id =  req.params.id
+        Question.findOne({
+            where:{id: id}
+        }).then(question => {
+            if (question != undefined){
+                // Pergunta encontrada
+                res.render("question", { page : "question"})
+            }else{
+                // Pergunta não encontrada
+                res.redirect("/")
+            }
+        })
+    })
 
-app.listen(8081, ()=>{console.log("Testing...")})
+    // Rota para a página de fazer pergunta
+    app.get("/newquestion", (req, res) => {
+        res.render("newquestion", { page : "newquestion"})
+    })
+    
+    // Rota para a página de pergunta salva
+    app.post("/save-question", (req, res) => {
+        var title = req.body.titulo
+        var description = req.body.descricao
+        // INSERT
+        Question.create({
+            title: title,
+            description : description
+        }).then(()=> {
+            res.redirect("/")
+        })
+    })
+    
+    app.listen(8081, ()=>{console.log("Testing...")})
