@@ -9,13 +9,13 @@ const bodyParser = require("body-parser")
 const connection = require("./database/database")
 
 // Mapeando a tabela pergunta
-const questionModel = require("./database/Question")
+const Question = require("./database/Question")
 
 // Conectando
 connection
 .authenticate()
 .then( () => {
-console.log("Conexão feita com o banco de dados")
+    console.log("Conexão feita com o banco de dados")
 })
 .catch((msgErro) => {
     console.log(msgErro)
@@ -46,10 +46,15 @@ app.get("/asking", (req, res) => {
 })
 
 // Rota para a página de pergunta salva
-app.post("/asking", (req, res) => {
-    var titulo = req.body.titulo;
-    var descricao = req.body.descricao;
-    res.send(`Formulário recebido! ${titulo} ${descricao} "`)
+app.post("/save-question", (req, res) => {
+    var title = req.body.titulo
+    var description = req.body.descricao
+    Question.create({
+        title: title,
+        description : description
+    }).then(()=> {
+        res.redirect("/")
+    })
 })
 
 app.listen(8081, ()=>{console.log("Testing...")})
