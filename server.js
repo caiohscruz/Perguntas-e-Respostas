@@ -8,6 +8,9 @@ const bodyParser = require("body-parser")
 // Setando conexão com o banco de dados
 const connection = require("./database/database")
 
+// Mapeando a tabela pergunta
+const questionModel = require("./database/Question")
+
 // Conectando
 connection
 .authenticate()
