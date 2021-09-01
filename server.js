@@ -59,7 +59,10 @@ app.get("/", (req, res) => {
         }).then(question => {
             if (question != undefined){
                 // Pergunta encontrada
-                res.render("question", { page : "question"})
+                res.render("question", { 
+                    question : question,
+                    page : "question"
+                })
             }else{
                 // Pergunta não encontrada
                 res.redirect("/")
