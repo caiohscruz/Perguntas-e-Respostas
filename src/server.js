@@ -1,6 +1,7 @@
 // Setando o express
 const express = require("express")
 const app     = express()
+const path = require('path')
 
 // Componente necessário para capturar valores do formulário
 const bodyParser = require("body-parser")
@@ -9,12 +10,12 @@ const bodyParser = require("body-parser")
 const connection = require("./database/database")
 
 // Mapeando a tabela Questions
-const Question = require("./database/Question")
+const Questions = require("./database/Questions")
 
 // Mapeando a tabela Answers
-const Answer = require("./database/Answer")
+const Answers = require("./database/Answers")
 
-// Conectando
+// Apresentará no console se a conexão transcorreu bem
 connection
 .authenticate()
 .then( () => {
@@ -29,6 +30,8 @@ app.set('view engine', 'ejs')
 // Para que o express reconheça imagens e CSS - public é o nome do diretorio
 app.use(express.static('public'))
 
+app.set('views', path.join(__dirname, 'views'))
+
 //
 app.use(bodyParser.json())
 
@@ -42,14 +45,13 @@ app.use(bodyParser.urlencoded({
 app.get("/", async (req, res) => {
     // SELECT - raw true para não trazer elementos desnecessarios do bd
     // ASC/DESC - crescente ou decrescente
-    await Question.findAll({
+    await Questions.findAll({
         raw: true, 
         order:[
             ['id', 'DESC']
         ]}).then(questions => {
             res.render("index", {
-                questions : questions,
-                page : "home"
+                questions : questions
             })
         })
     })
@@ -57,12 +59,12 @@ app.get("/", async (req, res) => {
     // Rota para a página de fazer pergunta
     app.get("/question/:id", async (req, res) => {
         var id =  req.params.id
-        await Question.findOne({
+        await Questions.findOne({
             where:{id: id}
         }).then(async question => {
             if (question != undefined){
                 // Pergunta encontrada
-                await Answer.findAll({
+                await Answers.findAll({
                     where: {questionId: id},
                     raw: true, 
                     order:[
@@ -70,8 +72,7 @@ app.get("/", async (req, res) => {
                     ]}).then(answers => {
                         res.render("question", { 
                             question : question,
-                            answers: answers,
-                            page : "question"
+                            answers: answers
                         })
                     })
                 }else{
@@ -83,15 +84,15 @@ app.get("/", async (req, res) => {
         
         // Rota para a página de fazer pergunta
         app.get("/newquestion", (req, res) => {
-            res.render("newquestion", { page : "newquestion"})
+            res.render("newquestion")
         })
         
         // Rota para a página de pergunta salva
         app.post("/save-question", async (req, res) => {
-            var title = req.body.titulo
-            var description = req.body.descricao
+            var title = req.body.title
+            var description = req.body.description
             // INSERT
-            await Question.create({
+            await Questions.create({
                 title: title,
                 description : description
             }).then(()=> {
@@ -101,11 +102,11 @@ app.get("/", async (req, res) => {
         
         // Rota para a página de pergunta salva
         app.post("/save-answer", async (req, res) => {
-            var body = req.body.answerBody
+            var description = req.body.description
             var questionId = req.body.questionId
             // INSERT
-            await Answer.create({
-                body: body,
+            await Answers.create({
+                description: description,
                 questionId : questionId
             }).then(()=> {
                 res.redirect("/question/"+questionId)

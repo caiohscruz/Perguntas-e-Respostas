@@ -3,7 +3,7 @@ const Sequelize = require("sequelize")
 const connection = require("./database")
 
 /* Cria a estrutura da tabela. STRING < TEXT */
-const Question = connection.define("Questions",{
+const Questions = connection.define("Questions",{
     title:{
         type: Sequelize.STRING,
         allownull : false
@@ -15,6 +15,6 @@ const Question = connection.define("Questions",{
 })
 /* Trecho para sincronizar a tabela, criando-a caso não exista
     force "false" para não criar uma tabela caso já exista - CREATE*/
-Question.sync({force: false})
+Questions.sync({force: false})
 
-module.exports = Question
+module.exports = Questions

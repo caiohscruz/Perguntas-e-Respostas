@@ -1,0 +1,50 @@
+<!-- Inclui head -->
+<%- include("partials/head.ejs") %>
+
+<body>
+    
+    <!-- Inclui navbar-->
+    <%- include("partials/navbar.ejs") %>
+    
+    <div class="container">
+        
+        <div class="card">
+            <div class="card-body">
+                <h3>Seção de perguntas</h3>    
+            </div>
+            <div class="card-footer">     
+                <a href="/newquestion" class="btn btn-primary">Incluir pergunta</a>
+            </div>
+        </div>
+        
+        
+        <% if(questions.length!=0){ %>
+            
+            <% questions.forEach(question => { %>
+                <div class="card">
+                    
+                    <div class="card-body">
+                        <h3> <%= question.title %> </h3>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-primary" href='/question/<%= question.id %>' >Responder</a>
+                    </div>
+                </div>
+                
+                
+                <% }) %>
+                
+                <% }else{ %>
+                    
+                    <div class="bg">
+                        <h5> Ainda não há perguntas. Seja o primeiro a perguntar, clique no botão "Perguntar"</h5>            
+                    </div>
+                    
+                    <% } %>
+                    
+                </div>             
+                
+            </body>
+            
+            <!-- Inclui footer -->
+            <%- include("partials/footer.ejs") %>

@@ -1,0 +1,55 @@
+<!-- Inclui head -->
+<%- include("partials/head.ejs") %>
+
+<body>
+    
+    <!-- Inclui navbar-->
+    <%- include("partials/navbar.ejs") %>
+    
+    <div class="container">
+        
+        <div class="card">
+            <div class="card-header">
+                <h3><%= question.title %></h3>
+                <hr>
+                <p><%= question.description %></p>
+            </div>
+            <div class="card-body">
+                <form  method="POST" action="/save-answer">
+                    <label for="description" class="sr-only">Corpo da resposta</label>
+                    <textarea placeholder="Digite sua resposta" id="description" class="form-control" name="description"></textarea>
+                    <button type="submit" class="btn btn-primary">Responder</button>
+                    <input type="text" value="<%= question.id %>" name="questionId" class="sr-only">
+                </form>
+            </div>
+        </div>
+        
+        <% if(answers.length!=0){ %>
+            <br>
+            <h5>Respostas anteriores</h5>
+            
+            <% answers.forEach(answer => { %>
+                <div class="card">
+                    <div class="card-body">
+                        <p> <%= answer.description %> </p>
+                    </div>
+                </div> 
+                
+                <% }) %>
+                
+                <% }else{ %>
+                    
+                    <div class="bg">
+                        <h5> Ainda não há respostas. Seja o primeiro a responder preenchendo o formulário acima</h5>            
+                    </div>
+                    
+                    <% } %>
+                    
+                    
+                </div>
+                
+                
+            </body>
+            
+            <!-- Inclui footer -->
+            <%- include("partials/footer.ejs") %>
