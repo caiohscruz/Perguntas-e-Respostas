@@ -7,7 +7,16 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 
 // Rotas
-app.get("/", (req, res) => res.render("index"))
-app.get("/perguntar", (req, res) => res.render("perguntar"))
 
-app.listen(8081, ()=>{console.log("Rodando")})
+app.get("/", (req, res) => {
+    res.render("index", { page : "home"} )
+})
+app.get("/asking", (req, res) => {
+    res.render("asking", { page : "asking"})
+})
+
+app.post("/save-question", (req, res) => {
+    res.send("Formulário recebido!")
+})
+
+app.listen(8081, ()=>{console.log("Testing...")})
