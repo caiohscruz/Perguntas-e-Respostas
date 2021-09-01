@@ -5,6 +5,19 @@ const app     = express()
 // Componente necessário para capturar valores do formulário
 const bodyParser = require("body-parser")
 
+// Setando conexão com o banco de dados
+const connection = require("./database/database")
+
+// Conectando
+connection
+.authenticate()
+.then( () => {
+console.log("Conexão feita com o banco de dados")
+})
+.catch((msgErro) => {
+    console.log(msgErro)
+})
+
 // Dizendo para o express que o EJS deve ser usado como View Engine
 app.set('view engine', 'ejs')
 // Para que o express reconheça imagens e CSS - public é o nome do diretorio
