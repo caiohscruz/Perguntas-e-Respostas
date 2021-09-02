@@ -2,7 +2,7 @@
 
 ## :computer: Projeto
 
-Uma plataforma para perguntas e respostas, onde um usuário pode criar e responder perguntas.
+Uma plataforma para perguntas e respostas, onde um usuário pode criar e responder perguntas. Realizei o deploy da aplicação na Heroku, confira: [perg-e-resp.herokuapp.com](https://perg-e-resp.herokuapp.com/)
 
 ## :satellite: De onde?
 
@@ -27,5 +27,3 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - Body-Parser
 - Sequelize
 - Dotenv
-
-
