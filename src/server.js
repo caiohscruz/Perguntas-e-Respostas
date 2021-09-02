@@ -113,4 +113,4 @@ app.get("/", async (req, res) => {
             })
         })
         
-        app.listen(8081, ()=>{console.log("Testing...")})
+        app.listen(process.env.PORT||8081, ()=>{console.log("Testing...")})
